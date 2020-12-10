@@ -10,3 +10,5 @@ It needs an active internet connection to get Jquery and JqueryUI.
 5. Open the json and the file map.html from this repo
 6. Paste the content into map.html at line 178 between the backticks (json = \`*(PASTE HERE)*\`)
 7. Open map.html in your browser
+
+Function deepcopy in map_dump.lua found (here)[http://lua-users.org/wiki/CopyTable]
