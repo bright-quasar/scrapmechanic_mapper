@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+    <title>Scrap Mechanic Mapper</title>
+    <script
+			  src="https://code.jquery.com/jquery-3.5.1.js"
+			  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+    <script
+			  src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+			  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+			  crossorigin="anonymous"></script>
+    <style>
+		body {
+		font: 11px sans-serif;
+		}
+
+		h1 {
+			font-size: 16px;
+		}
+
+		table {
+		border-spacing: 0;
+		border-collapse: collapse;
+		}
+
+		table tr {
+		border: 1px solid black;
+		padding: 0;
+		margin: 0;
+		height: 15px;
+		}
+
+		table td {
+		padding: 0;
+		margin: 0;
+		height: 15px;
+		min-height: 15px;
+		max-height: 15px;
+		width: 15px;
+		min-width: 15px;
+		max-width: 15px;
+		overflow: hidden;
+		
+		border: 1px solid black;
+		}
+		table td.legend {
+			padding: 2px;
+			height: 15px;
+			min-height: 15px;
+			max-height: 15px;
+			width: 80px;
+			min-width: 80px;
+			max-width: 80px;
+			
+		}
+
+		/* 0 - Unknown */
+		table td.unknown { 
+		background-color: greenyellow;
+		}
+		/* 1 - Meadow */
+		table td.meadow {
+		background-color: darkolivegreen;
+		}
+		/* 2 - Forestz */
+		table td.forest {
+		background-color: darkgreen;
+		}
+		/* 3 - Desert */
+		table td.desert {
+		background-color: sandybrown;
+		}
+		/* 4 - Field */
+		table td.field {
+		background-color: goldenrod;
+		}
+		/* 5 - Burnt Forest */
+		table td.burnt_forest {
+		background-color: rgb(36, 5, 0);
+		}
+		/* 6 - Autumn Forest */
+		table td.autumn_forest {
+		background-color: maroon;
+		}
+		/* 7 - Mountain */
+		table td.mountain {
+		background-color: dimgrey;
+		}
+		/* 8 - Lake */
+		table td.lake {
+		background-color: dodgerblue;
+		}
+
+		table td.poi {
+		border: 1px double darkorchid;
+		}
+
+		table td.cliff {
+		background: repeating-linear-gradient(
+			45deg,
+			#333333,
+			#333333 3px,
+			#984646 3px,
+			#984646 6px
+			);
+		}
+
+		.tooltip {
+		position: absolute;
+		width: 200px;
+		height: 28px;
+		pointer-events: none;
+		}
+
+		.mo {
+		position: relative;
+		display: none;
+		border: 1px solid black;
+		background-color: white;
+		height: 60px;
+		width: 200px;
+		font: 15px sans-serif;
+		padding: 3px;
+		z-index: 10;
+		}
+		div.rd_o {
+		padding: 0px;
+		margin: 0px;
+		position: relative;
+		height: 15px;
+		width: 15px;
+		}
+		div.rd {
+		position: absolute;
+		display: inline-block;
+		border: none;
+		background-color: lightslategray;
+		padding: 0px;
+		margin: 0px;
+		}
+		div#legend {
+			margin-bottom: 25px;
+		}
+		div.west {
+		top: 5px;
+		left: 0px;
+		height: 5px;
+		width: 8px;
+		z-index: 2;
+		}
+		div.east {
+		top: 5px;
+		left: 8px;
+		height: 5px;
+		width: 8px;
+		z-index: 3;
+		}
+		div.north {
+		top: 0px;
+		left: 5px;
+		height: 8px;
+		width: 5px;
+		z-index: 4;
+		}
+		div.south {
+		top: 8px;
+		left: 5px;
+		height: 8px;
+		width: 5px;
+		z-index: 5;
+		}
+	</style>
+  
+  	<script>
+	//PASTE DUMPED JSON INTO THIS VARIABLE
+    json = ``;
+  	</script>
+  	<script>
+    	$(document).ready(function() {
+    		jsonp = JSON.parse(json);
+    		processData("");
+		});
+
+		function ml(e) {
+			$("div.mo").offset({left: 0, top: 0}).css("display", "none");
+		}
+
+		function me(e) {
+			var v = $(e.currentTarget).offset();
+			$("div.mo").offset({left: 0, top: 0}).offset({top: v.top, left: v.left + 25}).css("display", "inline");
+			$("div.mo").text($(e.currentTarget).attr("title"));
+			
+			if (parseInt($(e.currentTarget).attr("title"))==101) $("div.mo").text("Crashsite");
+			if (parseInt($(e.currentTarget).attr("title"))==102) $("div.mo").text("Hideout");
+			if (parseInt($(e.currentTarget).attr("title"))==103) $("div.mo").text("Silo District");
+			if (parseInt($(e.currentTarget).attr("title"))==104) $("div.mo").text("Ruin City");
+			if (parseInt($(e.currentTarget).attr("title"))==105) $("div.mo").text("Crashed Ship");
+			if (parseInt($(e.currentTarget).attr("title"))==106) $("div.mo").text("Large Camp");
+			if (parseInt($(e.currentTarget).attr("title"))==107) $("div.mo").text("Medium Capsule Scrapyard");
+			if (parseInt($(e.currentTarget).attr("title"))==108) $("div.mo").text("Medium Labyrinth");
+
+			if (parseInt($(e.currentTarget).attr("title"))==109) $("div.mo").text("Mechanic Station");
+			if (parseInt($(e.currentTarget).attr("title"))==110) $("div.mo").text("Packingstation Vegetables");
+			if (parseInt($(e.currentTarget).attr("title"))==111) $("div.mo").text("Packing Station Fruit");
+
+			if (parseInt($(e.currentTarget).attr("title"))==112) $("div.mo").text("Warehouse - 2 floors");
+			if (parseInt($(e.currentTarget).attr("title"))==113) $("div.mo").text("Warehouse - 3 floors");
+			if (parseInt($(e.currentTarget).attr("title"))==114) $("div.mo").text("Warehouse - 4 floors");
+			if (parseInt($(e.currentTarget).attr("title"))==501) $("div.mo").text("Burnt forest - large farmbotscrapyard");
+			if (parseInt($(e.currentTarget).attr("title"))==115) $("div.mo").text("Meadow with roads");
+			if (parseInt($(e.currentTarget).attr("title"))==116) $("div.mo").text("Camp");
+			if (parseInt($(e.currentTarget).attr("title"))==117) $("div.mo").text("Ruin");
+			if (parseInt($(e.currentTarget).attr("title"))==118) $("div.mo").text("Random");
+			if (parseInt($(e.currentTarget).attr("title"))==201) $("div.mo").text("Forest Camp");
+			if (parseInt($(e.currentTarget).attr("title"))==202) $("div.mo").text("Forest Ruin");
+			if (parseInt($(e.currentTarget).attr("title"))==203) $("div.mo").text("Forest Random");
+			if (parseInt($(e.currentTarget).attr("title"))==301) $("div.mo").text("Desert Random");
+			if (parseInt($(e.currentTarget).attr("title"))==119) $("div.mo").text("Farming Patch");
+			if (parseInt($(e.currentTarget).attr("title"))==401) $("div.mo").text("Field Ruin");
+			if (parseInt($(e.currentTarget).attr("title"))==402) $("div.mo").text("Field Random");
+			if (parseInt($(e.currentTarget).attr("title"))==502) $("div.mo").text("Burnt Forest Camp");
+			if (parseInt($(e.currentTarget).attr("title"))==503) $("div.mo").text("Burnt Forest Ruin");
+			if (parseInt($(e.currentTarget).attr("title"))==504) $("div.mo").text("Burnt Forest Random");
+			if (parseInt($(e.currentTarget).attr("title"))==601) $("div.mo").text("Autumn Forest Camp");
+			if (parseInt($(e.currentTarget).attr("title"))==602) $("div.mo").text("Autumn Forest Ruin");
+			if (parseInt($(e.currentTarget).attr("title"))==603) $("div.mo").text("Autumn Forest Random");
+			if (parseInt($(e.currentTarget).attr("title"))==801) $("div.mo").text("Lake Random");
+			if (parseInt($(e.currentTarget).attr("title"))==120) $("div.mo").text("Ruin Medium");
+			if (parseInt($(e.currentTarget).attr("title"))==121) $("div.mo").text("Chemlake Medium");
+			if (parseInt($(e.currentTarget).attr("title"))==122) $("div.mo").text("Build Area Medium");
+			if (parseInt($(e.currentTarget).attr("title"))==204) $("div.mo").text("Forest Ruin Medium");
+			if (parseInt($(e.currentTarget).attr("title"))==802) $("div.mo").text("Lake Underwater Medium");  
+		}
+
+	function processData(allText) {
+		minX = jsonp.bounds.xMin
+		maxX = jsonp.bounds.xMax
+		minY = jsonp.bounds.yMin
+		maxY = jsonp.bounds.yMax
+		farr = [];
+		$("#map tr").remove()
+		for (var i=maxY-1;i>=minY;i--) {
+		tr = $("<tr></tr>");
+		for (var j=minX;j<=maxX;j++) {
+			td = $("<td></td>");
+			$(td).attr("x-data-flags", jsonp.flags[i-minY][j-minX]);
+			$(td).attr("x-data-terr", (jsonp.flags[i-minY][j-minX] & 0xf000) >> 12 );
+			$(td).attr("x-data-tid", (jsonp.tileId[i-minY][j-minX]) );
+			$(td).attr("x-data-road", (jsonp.flags[i-minY][j-minX] & 0x0f00) >> 8);
+			$(td).attr("x-data-cliff", (jsonp.flags[i-minY][j-minX] & 0x00ff) );
+			$(td).attr("x-data-x", j);
+			$(td).attr("x-data-y", i);
+			d = $("<div class='rd_o'></div>");
+			if (((jsonp.flags[i-minY][j-minX] & 0x0f00) >>8) & 1) $(d).append("<div class='rd east'></div>");
+			if (((jsonp.flags[i-minY][j-minX] & 0x0f00) >>8) & 2) $(d).append("<div class='rd north'></div>");
+			if (((jsonp.flags[i-minY][j-minX] & 0x0f00) >>8) & 4) $(d).append("<div class='rd west'></div>");
+			if (((jsonp.flags[i-minY][j-minX] & 0x0f00) >>8) & 8) $(d).append("<div class='rd south'></div>");
+			$(td).append(d);
+			terr = (jsonp.flags[i-minY][j-minX] & 0xf000) >> 12;
+			if (terr == 0) $(td).addClass("unknown");
+			if (terr == 1) $(td).addClass("meadow")
+			if (terr == 2) $(td).addClass("forest");
+			if (terr == 3) $(td).addClass("desert");
+			if (terr == 4) $(td).addClass("field");
+			if (terr == 5) $(td).addClass("burnt_forest");
+			if (terr == 6) $(td).addClass("autumn_forest");
+			if (terr == 7) $(td).addClass("mountain");
+			if (terr == 8) $(td).addClass("lake");
+			if ((jsonp.flags[i-minY][j-minX] & 0x00ff) > 0) $(td).addClass("cliff");
+			poi = jsonp.poi[i-minY][j-minX]
+			if (poi != 0) {
+			if (poi == 101) $(td).text("CR")
+			if (poi == 102) $(td).text("HO");
+			if (poi == 103) $(td).text("SD");
+			if (poi == 104) $(td).text("RC");
+			if (poi == 105) $(td).text("CS");
+			if (poi == 106) $(td).text("CL");
+			if (poi == 107) $(td).text("SY");
+			if (poi == 108) $(td).text("LA");
+
+			if (poi == 109) $(td).text("MS");
+			if (poi == 110) $(td).text("PV");
+			if (poi == 111) $(td).text("PF");
+
+			if (poi == 112) $(td).text("W2");
+			if (poi == 113) $(td).text("W3");
+			if (poi == 114) $(td).text("W4");
+			$(td).addClass("poi");
+			$(td).mouseenter(me).mouseleave(ml);
+			$(td).attr("title", String(poi))
+			}
+			$(tr).append(td);
+		}
+		$("#map").append(tr);
+		}
+	}
+  </script>
+</head>
+<body>
+  <div id="legend">
+	  <h1>Scrap Mechanic Survival Map</h1>
+	  <table>
+		  <tr>
+			  <td class="unknown"></td><td class="legend">Unknown</td>
+			  <td class="meadow"></td><td class="legend">Meadow</td>
+			  <td class="forest"></td><td class="legend">Forest</td>
+			  <td class="desert"></td><td class="legend">Desert</td>
+			  <td class="field"></td><td class="legend">Field</td>
+			  <td class="burnt_forest"></td><td class="legend">Burnt Forest</td>
+			  <td class="autumn_forest"></td><td class="legend">Autumn Forest</td>
+			  <td class="mountain"></td><td class="legend">Mountain</td>
+			  <td class="lake"></td><td class="legend">Lake</td>
+			  <td class="cliff"></td><td class="legend">Cliff</td>
+		  </tr>
+	  </table>
+  </div>
+  <table id="map">
+    <tr>
+      <td class="forest">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  <div class="mo">&nbsp;</div>
+</body>
+</html>
