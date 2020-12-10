@@ -8,5 +8,5 @@ It needs an active internet connection to get Jquery and JqueryUI.
 3. Make a backup of your savegame to be safe
 4. Start the game and load your survival game. The game starts and creates a new file *map_dump.json* in Scrap Mechanic\Survival.
 5. Open the json and the file map.html from this repo
-6. Paste the content into map.html at line 178 between the backticks (json = `*(PASTE HERE)*`)
+6. Paste the content into map.html at line 178 between the backticks (json = \`*(PASTE HERE)*\`)
 7. Open map.html in your browser
